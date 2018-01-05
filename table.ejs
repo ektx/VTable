@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>table</title>
+	<link rel="stylesheet" type="text/css" href="css/VTable.css">
+	<style type="text/css">
+		body {
+			background: #f5f5f5;
+		}
+
+		.z-table-mod {
+			width: 500px;
+			height: 300px;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="show-table">
+		<z-table></z-table>
+	</div>
+
+	<script type="text/x-template" id="z-table-mod">
+		<div class="z-table-mod">
+			<div class="v-table-header">
+				<table :style="{width: tableW +'px' }">
+					<colgroup>
+						<col v-for="w in rowWidth" :style="{width: w+'px'}">
+					</colgroup>
+					<thead>
+						<tr v-for="trow in tableFormat">
+							<th 
+								v-for="th in trow" 
+								:colspan="th.colspan" 
+								:rowspan="th.rowspan"
+							>
+								<div class="v-table-td-inner">{{ th.text }}</div>
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="v-table-body" @scroll="scrollEvt">
+				<table :style="{width: tableW +'px' }">
+					<colgroup>
+						<col v-for="w in rowWidth" :style="{width: w+'px'}">
+					</colgroup>
+					<tbody>
+						<tr v-for="row in data.body">
+							<td v-for="td in row">
+								<div class="v-table-td-inner">
+									{{ td }}
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</script>
+
+	<script src="js/vue.min.js"></script>
+	<script>
+
+		// 注册
+		Vue.component('z-table', {
+			template: '#z-table-mod',
+			data: function() {
+				return {
+					headBox: null,
+					bodyBox: null,
+					rowWidth: [],
+					tableW: 0,
+					tableFormat: [],
+					data: {}
+				}
+			},
+			methods: {
+				// 滚动条功能
+				scrollEvt: function(evt) {
+
+					var left = evt.target.scrollLeft;
+					var right = evt.target.scrollTop;
+
+					this.headBox.scrollLeft = left
+				},
+
+				/*
+					格式化表格数据
+					------------------------------------
+					@json  [object] 数据
+					@level [number] 层级
+				*/
+				formatTableData: function(json, level) {
+					var _ = this;
+
+					if(!_.tableFormat[level]) {
+						_.tableFormat[level] = []
+					}
+
+					json.forEach(function(val, i) {
+						var colspan = 1
+						var rowspan = 1
+
+						if ('children' in val) {
+							_.formatTableData(val.children, level + 1)
+							colspan = val.children.length
+						} 
+						else {
+							rowspan = _.tableFormat.length - level
+						}
+
+						// 格式数据
+						_.tableFormat[level].push({
+							text: val.text,
+							colspan: colspan,
+							rowspan: rowspan
+						})
+
+						if ('width' in val) {
+							_.rowWidth.push(val.width)
+							_.tableW += val.width
+						}
+					})
+
+				}	
+			},
+			created: function() {
+
+				this.formatTableData(this.data.thead, 0)
+
+			},
+			mounted: function() {
+
+				this.headBox = this.$el.querySelector('.v-table-header')
+				this.bodyBox = this.$el.querySelector('.v-table-body')
+
+				this.bodyBox.style.top = this.headBox.scrollHeight + 'px'
+			}
+		})
+
+		var table = new Vue({
+			el: '#show-table'
+		})
+	</script>
+
+</body>
+</html>

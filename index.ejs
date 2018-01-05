@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>div</title>
+	<link rel="stylesheet" type="text/css" href="css/ztable.css" />
+	<style type="text/css">
+		body {
+			background: #f5f5f5;
+		}
+
+		.z-table-mod {
+			width: 400px;
+			height: 300px;
+			border: 1px solid #eee;
+			background: #fff;
+		}
+		.z-table-td {
+			width: 100px;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="show-table">
+		<z-table></z-table>
+	</div>
+
+	<script type="text/x-template" id="z-table-mod">
+		<div class="z-table-mod">
+			<div 
+				class="z-table-header"
+			>
+				<div class="z-tb-hd-tr">
+					<div class="z-table-td"></div>
+					<% for (let i = 1; i < 13; i++) { %>
+					<div class="z-table-td"><%= i %>月</div>
+					<% } %>
+					<div class="z-table-td">全年累计</div>
+				</div>
+			</div>
+			<div class="z-table-body">
+				<aside class="z-table-aside-mod">
+					
+				</aside>
+				<div 
+					class="z-table-body-inner"
+					v-on:scroll="scrollEvt"
+				>
+					<% for (let l = 0; l < 50; l++) { %>
+					<div class="z-tb-hd-tr">
+						<% for (let i = 0; i < 14; i++) { %>
+						<div class="z-table-td"><%= i %>月</div>
+						<% } %>
+					</div>
+					<% } %>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script src="js/vue.min.js"></script>
+	<script>
+
+		// 注册
+		Vue.component('z-table', {
+			template: '#z-table-mod',
+			data: {
+				headBox: null,
+				bodyBox: null
+			},
+			methods: {
+				scrollEvt: function(evt) {
+
+					var left = evt.target.scrollLeft;
+					var right = evt.target.scrollTop;
+
+					console.log(this)
+
+					this.headBox.scrollLeft = left
+				}	
+			},
+			mounted: function() {
+				this.headBox = this.$el.querySelector('.z-table-header');
+				this.bodyBox = this.$el.querySelector('.z-table-body');
+
+				this.bodyBox.style.top = this.headBox.scrollHeight + 'px'
+			}
+		})
+
+		var table = new Vue({
+			el: '#show-table'
+		})
+	</script>
+
+</body>
+</html>
