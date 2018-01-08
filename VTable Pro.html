@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>table</title>
-	<link rel="stylesheet" type="text/css" href="css/VTable.css">
+	<title>复杂表格</title>
+	<!-- 表格样式 -->
+	<link rel="stylesheet" type="text/css" href="src/VTable.css">
+	
 	<style type="text/css">
 		#show-table {
 			width: 1000px;
@@ -14,7 +16,9 @@
 </head>
 <body>
 
+	<!-- 表格内容 -->
 	<div id="show-table">
+		<!-- 使用 VTable 组件生成表格 -->
 		<v-table 
 			:header="tableHeader" 
 			:left="tableLeft" 
@@ -22,89 +26,25 @@
 		></v-table>
 	</div>
 
+	<!-- 用于存放模板的区域 -->
+	<div class="tem-mod"></div>
+	
+	<!-- jQ -->
 	<script src="js/jquery-3.2.1.min.js"></script>
-
-	<script type="text/x-template" id="v-table-mod">
-		<div class="v-table-mod">
-			<div class="v-table-header">
-				<table :style="{width: tableW +'px' }">
-					<colgroup>
-						<col v-for="w in rowWidth" :style="{width: w+'px'}">
-					</colgroup>
-					<thead>
-						<tr v-for="trow in headerFormat">
-							<th 
-								v-for="th in trow" 
-								:colspan="th.colspan" 
-								:rowspan="th.rowspan"
-							>
-								<div class="v-table-td-inner">{{ th.text }}</div>
-							</th>
-						</tr>
-					</thead>
-				</table>
-			</div>
-			<div class="v-table-body">
-
-				<aside 
-					class="vtable-fixed-left-mod" 
-					@scroll.self="scrollEvt"
-					@mouseenter="mouseoverEvt"
-				>
-					<table :style="{width: leftAsidwW +'px' }">
-						<colgroup>
-							<col v-for="w in left.width" :style="{width: w+'px'}">
-						</colgroup>
-						<thead>
-							<tr v-for="trow in leftFormat">
-								<th 
-									v-for="th in trow" 
-									:colspan="th.colspan" 
-									:rowspan="th.rowspan"
-								>
-									<div class="v-table-td-inner">{{ th.text }}</div>
-								</th>
-							</tr>
-						</thead>
-					</table>
-				</aside>
-
-				<section class="v-table-content">
-					<div 
-						class="v-table-inner" 
-						@scroll.self="scrollEvt"
-						@mouseenter="mouseoverEvt"
-					>
-						<table :style="{width: tableW +'px' }">
-							<colgroup>
-								<col v-for="w in rowWidth" :style="{width: w+'px'}">
-							</colgroup>
-							<tbody>
-								<tr v-for="row in data">
-									<td v-for="td in row">
-										<div class="v-table-td-inner">
-											{{ td }}
-										</div>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
-
-			</div>
-		</div>
-	</script>
-
+	<!-- Vue -->
 	<script src="js/vue.min.js"></script>
-	<script src="js/VTable.js"></script>
+
+	<!-- 表格组件功能 -->
+	<script src="src/VTable.js"></script>
+
 	<script>
 
 		// 表格头
 		var header = [
 			{
 				"text": "_aside_",
-				"width": 300
+				"width": 400,
+				"type": "leftAside"
 			},
 			{
 				"text": "2017",
@@ -464,36 +404,46 @@
 			}
 		];
 
-		var table = new Vue({
-			el: '#show-table',
-			data: {
-				tableData: {},
-				tableHeader: header,
-				tableLeft: {
-					data: leftAside,
-					width: [50, 100, 80, 150]
+		// 加载 VTable 表格
+		$('.tem-mod').load('src/template.html', function() {
+
+			// 完成后，我们开始生成表格内容
+			var table = new Vue({
+				el: '#show-table',
+				data: {
+					// 表格中间内容
+					tableData: {},
+					// 表格的头信息
+					tableHeader: header,
+					// 表格侧边
+					tableLeft: {
+						// 表格侧边数据 
+						data: leftAside,
+						// 表格侧边列宽
+						width: [50, 100, 100, 150]
+					}
+				},
+				mounted: function () {
+					var _ = this;
+
+					// 加载数据
+					$.ajax({
+						url: 'mock/hasLeft.json',
+						type: 'get'
+					})
+					.done(function(data) {
+						// 赋值给表格
+						_.tableData = data
+
+					})
+					.fail(function(err) {
+						// 请求数据错误时
+						console.error(err)
+					})
+
 				}
-			},
-			created: function() {
-			},
-			mounted: function () {
-				var _ = this;
-
-				// 加载数据
-				$.ajax({
-					url: 'mock/hasLeft.json',
-					type: 'get'
-				})
-				.done(function(data) {
-
-					_.tableData = data
-
-				})
-				.fail(function(err) {
-					console.error(err)
-				})
-
-			}
+			})
+			
 		})
 	</script>
 

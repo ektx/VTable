@@ -1,0 +1,32 @@
+#忽略常用文件
+
+# node project
+*node_modules
+
+# yarn
+*yarn.lock
+yarn-debug.log*
+yarn-error.log*
+*package-lock.json
+npm-debug.log*
+
+
+# Mac
+*.DS_Store
+
+# windows
+Thumbs.db
+
+
+# 添加你自己要忽略的文件
+
+
+
+# 编辑器文件
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.project
+*.vscode

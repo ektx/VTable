@@ -1,0 +1,73 @@
+
+<!-- VTable html 引用方式模板 -->
+<script type="text/x-template" id="v-table-mod">
+	<div class="v-table-mod">
+		<div class="v-table-header">
+			<table :style="{width: headTableW +'px' }">
+				<colgroup>
+					<col v-for="w in beadColWidth" :style="{width: w+'px'}">
+				</colgroup>
+				<thead>
+					<tr v-for="trow in headerFormat">
+						<th 
+							v-for="th in trow" 
+							:colspan="th.colspan" 
+							:rowspan="th.rowspan"
+						>
+							<div class="v-table-td-inner">{{ th.text }}</div>
+						</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<div class="v-table-body">
+
+			<aside 
+				class="vtable-fixed-left-mod" 
+				@scroll.self="scrollEvt"
+				@mouseenter="mouseoverEvt"
+			>
+				<table :style="{width: leftAsidwW +'px' }">
+					<colgroup>
+						<col v-for="w in left.width" :style="{width: w+'px'}">
+					</colgroup>
+					<thead>
+						<tr v-for="trow in leftFormat">
+							<th 
+								v-for="th in trow" 
+								:colspan="th.colspan" 
+								:rowspan="th.rowspan"
+							>
+								<div class="v-table-td-inner">{{ th.text }}</div>
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</aside>
+
+			<section class="v-table-content">
+				<div 
+					class="v-table-inner" 
+					@scroll.self="scrollEvt"
+					@mouseenter="mouseoverEvt"
+				>
+					<table :style="{width: bodyTableW +'px' }">
+						<colgroup>
+							<col v-for="w in bodyColWidth" :style="{width: w+'px'}">
+						</colgroup>
+						<tbody>
+							<tr v-for="row in data">
+								<td v-for="td in row">
+									<div class="v-table-td-inner">
+										{{ td }}
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</section>
+
+		</div>
+	</div>
+</script>

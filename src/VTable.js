@@ -1,14 +1,38 @@
 
-// 注册
+// 注册组件
 Vue.component('VTable', {
+	// 名称有冲突时，你可以修改这个 #v-table-mod 和修改模板
 	template: '#v-table-mod',
-	props: ['header', 'left', 'data'],
+	props: {
+		// 表格头
+		header: {
+			type: Array,
+			default: {}
+		},
+		// 表格数据
+		data: {
+			type: Array,
+			default: {}
+		},
+		// 表格侧边
+		left: {
+			type: Object,
+			default: {
+				data: [],
+				width: []
+			}
+		}
+	},
 	data: function() {
 		return {
 			headBox: null,
+			beadColWidth: [],
+			headTableW: 0,
+
 			bodyBox: null,
-			rowWidth: [],
-			tableW: 0,
+			bodyColWidth: [],
+			bodyTableW: 0,
+
 			tableFormat: [],
 			headerFormat: [],
 
@@ -31,7 +55,6 @@ Vue.component('VTable', {
 		header: function(newVal, oldVal) {
 			
 			this.formatTableHeaderData(newVal, 0, 'headerFormat')
-			console.log(this.header)
 		}
 	},
 	methods: {
@@ -60,38 +83,87 @@ Vue.component('VTable', {
 			@type  [string] 格式化的对象
 		*/
 		formatTableHeaderData: function(json, level, type, parent) {
-			var _ = this;
+			var _ = this
+			var maxLevel = 0
 
-			if(!_[type][level]) {
-				_[type][level] = []
+			// 给父级追加合并
+			var loopParent = function(myParent, my) {
+
+				myParent.colspan += my.colspan - 1
+
+				if (myParent._parent)
+					loopParent(myParent._parent, myParent)
+
 			}
 
-			json.forEach(function(val, i) {
-				var colspan = 1
-				var rowspan = 1
+			var loop = function (json, level, type, parent) {
 
-				if ('children' in val) {
-					_.formatTableHeaderData(val.children, level + 1, type, parent)
-					
-					colspan = val.children.length
-				} 
-				
-
-				// 格式数据
-				_[type][level].push({
-					text: val.text,
-					colspan: colspan,
-					rowspan: rowspan,
-					_level: level,
-					_parent: parent
-				})
-
-				if ('width' in val) {
-					_.rowWidth.push(val.width)
-					_.tableW += val.width
+				if(!_[type][level]) {
+					_[type][level] = []
 				}
-			})
 
+				json.forEach(function(val, i) {
+					var colspan = 1
+					var rowspan = 1
+					var hasChild = false
+					var parentData = {}
+
+					if ('children' in val) {
+						hasChild = true
+						colspan = val.children.length
+					} 
+
+					parentData = {
+						text: val.text,
+						colspan: colspan,
+						rowspan: rowspan,
+						_level: level,
+						_parent: parent
+					}
+
+					if (hasChild) {
+
+						loop(val.children, level + 1, type, parentData)
+					}
+
+					// 格式数据
+					_[type][level].push(parentData)
+
+					if ('width' in val) {
+						_.beadColWidth.push(val.width)
+						_.headTableW += val.width
+
+						if (val.type && val.type === 'leftAside') {
+
+						} else {
+							_.bodyColWidth.push( val.width )
+							_.bodyTableW += val.width
+						}
+					}
+
+					if (level > maxLevel) {
+						maxLevel = level
+					}
+				})
+			}
+
+			loop(json, level, type, parent)
+
+			this.headerFormat.forEach(function(val, i) {
+
+				val.forEach(function(vArr, vI) {
+					if (vArr._parent) {
+						if (vArr._level > 0 && vArr.colspan > 1) {
+							loopParent(vArr._parent, vArr)
+						}
+					}
+
+					if (vArr.colspan == 1) {
+						vArr.rowspan = maxLevel - vArr._level + 1
+						
+					}
+				})
+			})
 		},
 
 		/*
@@ -177,9 +249,14 @@ Vue.component('VTable', {
 
 		},
 
+		/*
+			更新表格布局
+			--------------------------------
+		*/
 		updateTable: function() {
 			this.headBox = this.$el.querySelector('.v-table-header')
 			this.bodyBox = this.$el.querySelector('.v-table-body')
+
 			this.leftBox = this.$el.querySelector('.vtable-fixed-left-mod')
 
 			this.bodyBox.style.top = this.headBox.scrollHeight + 'px'
@@ -194,27 +271,11 @@ Vue.component('VTable', {
 	},
 	created: function() {
 
-		console.log('表格头', this.header)
 		this.formatTableHeaderData(this.header, 0, 'headerFormat')
-		console.log(this.headerFormat)
 
+		if (this.left) {
+			this.formatAside(this.left.data)
+		}
 
-		console.log('表格左侧', this.left)
-		this.formatAside(this.left.data)
-		console.log(this.leftFormat)
-
-		console.log('表格数据', this.data)
-
-		// if (this.data) {
-		// 	// 
-		// }
-
-
-
-	},
-	mounted: function() {
-
-		
-		
 	}
 })
