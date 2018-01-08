@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>table</title>
+	<link rel="stylesheet" type="text/css" href="css/VTable.css">
+	<style type="text/css">
+		#show-table {
+			width: 1000px;
+			height: 600px;
+			margin: 0 auto;
+			border: 1px solid #ddd;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="show-table">
+		<v-table 
+			:header="tableHeader" 
+			:left="tableLeft" 
+			:data="tableData"
+		></v-table>
+	</div>
+
+	<script src="js/jquery-3.2.1.min.js"></script>
+
+	<script type="text/x-template" id="v-table-mod">
+		<div class="v-table-mod">
+			<div class="v-table-header">
+				<table :style="{width: tableW +'px' }">
+					<colgroup>
+						<col v-for="w in rowWidth" :style="{width: w+'px'}">
+					</colgroup>
+					<thead>
+						<tr v-for="trow in headerFormat">
+							<th 
+								v-for="th in trow" 
+								:colspan="th.colspan" 
+								:rowspan="th.rowspan"
+							>
+								<div class="v-table-td-inner">{{ th.text }}</div>
+							</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div class="v-table-body">
+
+				<aside 
+					class="vtable-fixed-left-mod" 
+					@scroll.self="scrollEvt"
+					@mouseenter="mouseoverEvt"
+				>
+					<table :style="{width: leftAsidwW +'px' }">
+						<colgroup>
+							<col v-for="w in left.width" :style="{width: w+'px'}">
+						</colgroup>
+						<thead>
+							<tr v-for="trow in leftFormat">
+								<th 
+									v-for="th in trow" 
+									:colspan="th.colspan" 
+									:rowspan="th.rowspan"
+								>
+									<div class="v-table-td-inner">{{ th.text }}</div>
+								</th>
+							</tr>
+						</thead>
+					</table>
+				</aside>
+
+				<section class="v-table-content">
+					<div 
+						class="v-table-inner" 
+						@scroll.self="scrollEvt"
+						@mouseenter="mouseoverEvt"
+					>
+						<table :style="{width: tableW +'px' }">
+							<colgroup>
+								<col v-for="w in rowWidth" :style="{width: w+'px'}">
+							</colgroup>
+							<tbody>
+								<tr v-for="row in data">
+									<td v-for="td in row">
+										<div class="v-table-td-inner">
+											{{ td }}
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+
+			</div>
+		</div>
+	</script>
+
+	<script src="js/vue.min.js"></script>
+	<script src="js/VTable.js"></script>
+	<script>
+
+		// 表格头
+		var header = [
+			{
+				"text": "_aside_",
+				"width": 300
+			},
+			{
+				"text": "2017",
+				"children": [
+					{
+						"text": "Q1",
+						"children": [
+							{
+								"text": "1月",
+								"width": 100
+							},
+							{
+								"text": "2月",
+								"width": 100
+							},
+							{
+								"text": "3月",
+								"width": 100
+							}
+						]
+					},
+					{
+						"text": "Q2",
+						"children": [
+							{
+								"text": "4月",
+								"width": 100
+							},
+							{
+								"text": "5月",
+								"width": 100
+							},
+							{
+								"text": "6月",
+								"width": 100
+							}
+						]
+					},
+					{
+						"text": "Q3",
+						"children": [
+							{
+								"text": "7月",
+								"width": 100
+							},
+							{
+								"text": "8月",
+								"width": 100
+							},
+							{
+								"text": "9月",
+								"width": 100
+							}
+						]
+					},
+					{
+						"text": "Q4",
+						"children": [
+							{
+								"text": "10月",
+								"width": 100
+							},
+							{
+								"text": "11月",
+								"width": 100
+							},
+							{
+								"text": "12月",
+								"width": 100
+							}
+						]
+					},
+					{
+						"text": "总结",
+						"width": 100
+					}
+				]
+			}
+		];
+
+		// 表格的侧边
+		var leftAside = [
+			{
+				"text": "1A",
+				"children": [
+					{
+						"text": "1A-1B",
+						"children": [
+							{
+								"text": "1A-1C",
+								"children": [
+									{
+										"text": "1A-1D"
+									},
+									{
+										"text": "1A-2D"
+									}
+								]
+							},
+							{
+								"text": "1A-2C"
+							}
+						]
+					},
+					{
+						"text": "1A-2B",
+						"children": [
+							{
+								"text": "nZBusCv",
+								"children": [
+									{
+										"text": "hLBfeC"
+									},
+									{
+										"text": "gCYaNz"
+									}
+								]
+							},
+							{
+								"text": "WJf"
+							}
+						]
+					},
+					{
+						"text": "1A-3B"
+					},
+					{
+						"text": "1A-4B"
+					},
+					{
+						"text": "1A-5B"
+					},
+					{
+						"text": "1A-6B"
+					}
+				]
+			},
+			{
+				"text": "2A",
+				"children": [
+					{
+						"text": "bmrUOXMWj",
+						"children": [
+							{
+								"text": "aSh",
+								"children": [
+									{
+										"text": "UBjDvGqI"
+									},
+									{
+										"text": "rEddXwlZO"
+									}
+								]
+							},
+							{
+								"text": "GU"
+							}
+						]
+					},
+					{
+						"text": "MipxprHWC",
+						"children": [
+							{
+								"text": "vNt",
+								"children": [
+									{
+										"text": "wGcaOkeVl"
+									},
+									{
+										"text": "ogO"
+									}
+								]
+							},
+							{
+								"text": "CiRguNc"
+							}
+						]
+					},
+					{
+						"text": 10
+					},
+					{
+						"text": 72
+					},
+					{
+						"text": 69
+					},
+					{
+						"text": 97
+					}
+				]
+			},
+			{
+				"text": "3A",
+				"children": [
+					{
+						"text": "BGBlfymE",
+						"children": [
+							{
+								"text": "fWgPYk",
+								"children": [
+									{
+										"text": "qV"
+									},
+									{
+										"text": "AqnasSe"
+									}
+								]
+							},
+							{
+								"text": "gStEYv"
+							}
+						]
+					},
+					{
+						"text": "TfcMSrFr",
+						"children": [
+							{
+								"text": "Wj",
+								"children": [
+									{
+										"text": "f"
+									},
+									{
+										"text": "Fhf"
+									}
+								]
+							},
+							{
+								"text": "Ggkkk"
+							}
+						]
+					},
+					{
+						"text": 13
+					},
+					{
+						"text": 49
+					},
+					{
+						"text": 13
+					},
+					{
+						"text": 26
+					}
+				]
+			},
+			{
+				"text": "4A",
+				"children": [
+					{
+						"text": "svYGlis",
+						"children": [
+							{
+								"text": "ovgSTgn",
+								"children": [
+									{
+										"text": "qyWhc"
+									},
+									{
+										"text": "ysBIp"
+									}
+								]
+							},
+							{
+								"text": "GuYd"
+							}
+						]
+					},
+					{
+						"text": "LWlQPHEuam",
+						"children": [
+							{
+								"text": "vpf",
+								"children": [
+									{
+										"text": "EhlYlzF"
+									},
+									{
+										"text": "PIylkdRYV"
+									}
+								]
+							},
+							{
+								"text": "YxOey"
+							}
+						]
+					},
+					{
+						"text": 16
+					},
+					{
+						"text": 87
+					},
+					{
+						"text": 55
+					},
+					{
+						"text": 11
+					}
+				]
+			},
+			{
+				"text": "5A",
+				"children": [
+					{
+						"text": "qtMRc",
+						"children": [
+							{
+								"text": "SCkLxR",
+								"children": [
+									{
+										"text": "QiEIig"
+									},
+									{
+										"text": "bj"
+									}
+								]
+							},
+							{
+								"text": "qnsolFL"
+							}
+						]
+					},
+					{
+						"text": "pgUrRbIB",
+						"children": [
+							{
+								"text": "cqG",
+								"children": [
+									{
+										"text": "s"
+									},
+									{
+										"text": "wmRAaltTGN"
+									}
+								]
+							},
+							{
+								"text": "bZuLRQg"
+							}
+						]
+					},
+					{
+						"text": 29
+					},
+					{
+						"text": 60
+					},
+					{
+						"text": 69
+					},
+					{
+						"text": 22
+					}
+				]
+			}
+		];
+
+		var table = new Vue({
+			el: '#show-table',
+			data: {
+				tableData: {},
+				tableHeader: header,
+				tableLeft: {
+					data: leftAside,
+					width: [50, 100, 80, 150]
+				}
+			},
+			created: function() {
+			},
+			mounted: function () {
+				var _ = this;
+
+				// 加载数据
+				$.ajax({
+					url: 'mock/hasLeft.json',
+					type: 'get'
+				})
+				.done(function(data) {
+
+					_.tableData = data
+
+				})
+				.fail(function(err) {
+					console.error(err)
+				})
+
+			}
+		})
+	</script>
+
+</body>
+</html>

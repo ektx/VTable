@@ -1,72 +1,76 @@
 ﻿{
 	"thead": [
 		{
-			"text": "L",
+			"text": "Q1",
 			"children": [
 				{
-					"text": "x",
+					"text": "1月",
 					"width": 100
 				},
 				{
-					"text": "LE",
+					"text": "2月",
 					"width": 100
 				},
 				{
-					"text": "nw",
+					"text": "3月",
 					"width": 100
 				}
 			]
 		},
 		{
-			"text": "V",
+			"text": "Q2",
 			"children": [
 				{
-					"text": "n",
+					"text": "4月",
 					"width": 100
 				},
 				{
-					"text": "JH",
+					"text": "5月",
 					"width": 100
 				},
 				{
-					"text": "I",
+					"text": "6月",
 					"width": 100
 				}
 			]
 		},
 		{
-			"text": "p",
+			"text": "Q3",
 			"children": [
 				{
-					"text": "lK",
+					"text": "7月",
 					"width": 100
 				},
 				{
-					"text": "u",
+					"text": "8月",
 					"width": 100
 				},
 				{
-					"text": "T",
+					"text": "9月",
 					"width": 100
 				}
 			]
 		},
 		{
-			"text": "yI",
+			"text": "Q4",
 			"children": [
 				{
-					"text": "fv",
+					"text": "10月",
 					"width": 100
 				},
 				{
-					"text": "ax",
+					"text": "11月",
 					"width": 100
 				},
 				{
-					"text": "S",
+					"text": "12月",
 					"width": 100
 				}
 			]
+		},
+		{
+			"text": "总计",
+			"width": 100
 		}
 	],
 	"tbody": [
@@ -820,5 +824,12 @@
 			672,
 			890
 		]
+	],
+	"leftAside": [
+		{},
+		{},
+		{},
+		{},
+		{}
 	]
 }
