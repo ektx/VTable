@@ -39,6 +39,7 @@
 
 .v-table-mod th,
 .v-table-mod td {
+	padding: 2px 4px;
 	border: 1px solid #eee;
 }
 

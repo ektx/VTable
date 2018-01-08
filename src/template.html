@@ -57,7 +57,7 @@
 						</colgroup>
 						<tbody>
 							<tr v-for="row in data">
-								<td v-for="td in row">
+								<td v-for="(td, key) in row" :style="{textAlign: bodyTextAlign[key]}">
 									<div class="v-table-td-inner">
 										{{ td }}
 									</div>

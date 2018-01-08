@@ -31,6 +31,7 @@ Vue.component('VTable', {
 
 			bodyBox: null,
 			bodyColWidth: [],
+			bodyTextAlign: [],
 			bodyTableW: 0,
 
 			tableFormat: [],
@@ -129,15 +130,16 @@ Vue.component('VTable', {
 					// 格式数据
 					_[type][level].push(parentData)
 
-					if ('width' in val) {
+					if ('width' in val && !val.children) {
 						_.beadColWidth.push(val.width)
 						_.headTableW += val.width
 
-						if (val.type && val.type === 'leftAside') {
+						if (!val.type && val.type !== 'leftAside') {
 
-						} else {
 							_.bodyColWidth.push( val.width )
 							_.bodyTableW += val.width
+
+							_.bodyTextAlign.push( val.textAlign ? val.textAlign : 'left' )
 						}
 					}
 
