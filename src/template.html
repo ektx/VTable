@@ -3,7 +3,7 @@
 <script type="text/x-template" id="v-table-mod">
 	<div class="v-table-mod">
 		<div class="v-table-header">
-			<table :style="{width: headTableW +'px' }">
+			<table :style="{width: headTableW + 3 +'px' }">
 				<colgroup>
 					<col v-for="w in beadColWidth" :style="{width: w+'px'}">
 				</colgroup>
@@ -38,7 +38,7 @@
 								:colspan="th.colspan" 
 								:rowspan="th.rowspan"
 							>
-								<div class="v-table-td-inner">{{ th.text }}</div>
+								<div class="v-table-td-inner" :title="th.text">{{ th.text }}</div>
 							</th>
 						</tr>
 					</thead>
@@ -58,7 +58,7 @@
 						<tbody>
 							<tr v-for="row in data">
 								<td v-for="(td, key) in row" :style="{textAlign: bodyTextAlign[key]}">
-									<div class="v-table-td-inner">
+									<div class="v-table-td-inner" :title="td">
 										{{ td }}
 									</div>
 								</td>

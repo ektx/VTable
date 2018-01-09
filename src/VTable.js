@@ -236,7 +236,7 @@ Vue.component('VTable', {
 					if (_val) {
 
 						if (_val._level > 0 && !_val._children && _val._level < asideThSize) {
-							_val.colspan = asideThSize - _val._level + 1
+							_val.colspan = asideThSize - _val._level
 						}
 
 						return _val
