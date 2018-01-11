@@ -7,12 +7,12 @@ Vue.component('VTable', {
 		// 表格头
 		header: {
 			type: Array,
-			default: {}
+			default: []
 		},
 		// 表格数据
 		data: {
 			type: Array,
-			default: {}
+			default: []
 		},
 		// 表格侧边
 		left: {
@@ -26,21 +26,22 @@ Vue.component('VTable', {
 	data: function() {
 		return {
 			headBox: null,
-			beadColWidth: [],
+			headColWidth: [],
 			headTableW: 0,
+			headerFormat: [],
 
+			body: this.data,
 			bodyBox: null,
 			bodyColWidth: [],
 			bodyTextAlign: [],
 			bodyTableW: 0,
+			bodyFormat: [],
 
-			tableFormat: [],
-			headerFormat: [],
 
 			leftBox: null,
-			leftFormat: [],
 			asideDeep: 0,
 			leftAsidwW: 0,
+			leftFormat: [],
 
 			mouseoverEleTagName: null
 		}
@@ -48,6 +49,11 @@ Vue.component('VTable', {
 	watch: {
 		header: function(newVal, oldVal) {
 			this.formatTableHeaderData(newVal, 0, 'headerFormat')
+		},
+
+		data: function (newVal, oldVal) {
+			console.log(newVal)
+			this.formatBody(newVal)
 		},
 
 		'left.data': function (newVal, oldVal) {
@@ -85,7 +91,7 @@ Vue.component('VTable', {
 
 			this.headerFormat = []
 			// 清列宽
-			this.beadColWidth = []
+			this.headColWidth = []
 			this.bodyColWidth = []
 			// 清宽度
 			this.headTableW = 0
@@ -136,7 +142,7 @@ Vue.component('VTable', {
 					_[type][level].push(parentData)
 
 					if ('width' in val && !val.children) {
-						_.beadColWidth.push(val.width)
+						_.headColWidth.push(val.width)
 						_.headTableW += val.width
 
 						if (!val.type && val.type !== 'leftAside') {
@@ -264,6 +270,48 @@ Vue.component('VTable', {
 
 		},
 
+		formatBody: function(arr) {
+			var _ = this
+			var holderExpand = '_NEED_'
+			
+			_.bodyFormat = []
+			arr.forEach(function(val, i) {
+
+				var innerArr = []
+				if (holderExpand === '_NEED_') {
+
+					val.forEach(function(inner, inxdex) {
+						var isObj = inner instanceof Object
+						var type = 'text'
+						var expandVal = ''
+
+						if (isObj && 'type' in inner) {
+							type = inner.type
+
+							if (type === 'expand') {
+								holderExpand = inner.expand ? '_NEED_' : '_NOT_'
+								expandVal = inner.expand
+							}
+						}
+
+						innerArr.push({
+							text: isObj ? inner.text : inner,
+							colspan: isObj ? inner.cols : 1,
+							rowspan: 1,
+							type: type,
+							expand: expandVal
+						})
+					})
+				} else {
+					holderExpand = '_NEED_'
+				}
+
+				_.bodyFormat.push(innerArr)
+				
+			})
+
+		},
+
 		/*
 			更新表格布局
 			--------------------------------
@@ -282,6 +330,31 @@ Vue.component('VTable', {
 		*/
 		mouseoverEvt: function(evt) {
 			this.mouseoverEleTagName = evt.target.tagName
+		},
+
+		/*
+			添加行
+		*/
+		insert: function (index, data) {
+
+			var data = [{
+				text: data,
+				colspan: this.headColWidth.length,
+				rowspan: 1
+			}]
+
+			this.bodyFormat.splice(index + 1, 0, data)
+		},
+
+		/* 移除 */
+		remove: function (index) {
+			this.bodyFormat.splice(index, 1)
+		},
+
+		toggleRowData: function (trIndex, tdIndex) {
+			this.data[trIndex][tdIndex].expand = !this.data[trIndex][tdIndex].expand
+			
+			this.formatBody(this.data)
 		}	
 	},
 	created: function() {

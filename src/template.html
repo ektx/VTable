@@ -3,9 +3,9 @@
 <script type="text/x-template" id="v-table-mod">
 	<div class="v-table-mod">
 		<div class="v-table-header">
-			<table :style="{width: headTableW + 3 +'px' }">
+			<table :style="{width: headTableW + (left.data.length > 0 ? 3 : 0) +'px' }">
 				<colgroup>
-					<col v-for="w in beadColWidth" :style="{width: w+'px'}">
+					<col v-for="w in headColWidth" :style="{width: w+'px'}">
 				</colgroup>
 				<thead>
 					<tr v-for="trow in headerFormat">
@@ -56,9 +56,21 @@
 							<col v-for="w in bodyColWidth" :style="{width: w+'px'}">
 						</colgroup>
 						<tbody>
-							<tr v-for="row in data">
-								<td v-for="(td, key) in row" :style="{textAlign: bodyTextAlign[key]}">
-									<div class="v-table-td-inner" :title="td" v-html="td"></div>
+							<tr v-for="(row, index) in bodyFormat">
+								<td 
+									v-for="(td, key) in row" 
+									:colspan="td.colspan" 
+									:rowspan="td.rowspan"
+									:style="{textAlign: bodyTextAlign[key]}"
+								>
+									<div class="v-table-td-inner">
+										<i 
+											v-if="td.type === 'expand'" 
+											:class="[td.expand ?'open': 'close']"
+											@click="toggleRowData(index, key)"
+										></i>
+										<span :title="td.text" v-html="td.text"></span>
+									</div>
 								</td>
 							</tr>
 						</tbody>

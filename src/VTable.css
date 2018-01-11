@@ -29,6 +29,7 @@
 	overflow-y: auto;
 	overflow-x: scroll;
 	overflow: overlay;
+	background-color: whitesmoke;
 }
 .v-table-content {
 	height: 100%;
@@ -40,14 +41,36 @@
 	overflow: auto;
 }
 
+.v-table-inner td i {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin: 0 3px;
+	font-size: 12px;
+	font-style: normal;
+	text-align: center;
+	line-height: 16px;
+	border: 1px solid #eee;
+	border-radius: 3px;
+	cursor: pointer;
+}
+/* 收缩按钮 */
+.v-table-inner td i.close:after {
+	content: '+';
+	display: inline-block;
+	text-align: center;
+}
+/* 展开按钮 */
+.v-table-inner td i.open:after {
+	content: '-';
+	display: inline-block;
+	text-align: center;
+}
+
 .v-table-mod th,
 .v-table-mod td {
 	padding: 2px 4px;
 	border: 1px solid #eee;
-}
-
-.v-table-mod th {
-	background-color: #f5f5f5;
 }
 
 .v-table-header {
