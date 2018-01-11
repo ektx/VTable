@@ -46,16 +46,12 @@ Vue.component('VTable', {
 		}
 	},
 	watch: {
-		data: function(newVal, oldVal) {
-
-			this.$nextTick(function() {
-				this.updateTable()
-			})
+		header: function(newVal, oldVal) {
+			this.formatTableHeaderData(newVal, 0, 'headerFormat')
 		},
 
-		header: function(newVal, oldVal) {
-			
-			this.formatTableHeaderData(newVal, 0, 'headerFormat')
+		'left.data': function (newVal, oldVal) {
+			this.formatAside(newVal)
 		}
 	},
 	methods: {
@@ -86,6 +82,14 @@ Vue.component('VTable', {
 		formatTableHeaderData: function(json, level, type, parent) {
 			var _ = this
 			var maxLevel = 0
+
+			this.headerFormat = []
+			// 清列宽
+			this.beadColWidth = []
+			this.bodyColWidth = []
+			// 清宽度
+			this.headTableW = 0
+			this.bodyTableW = 0
 
 			// 给父级追加合并
 			var loopParent = function(myParent, my) {
@@ -119,7 +123,8 @@ Vue.component('VTable', {
 						colspan: colspan,
 						rowspan: rowspan,
 						_level: level,
-						_parent: parent
+						_parent: parent,
+						_children: hasChild
 					}
 
 					if (hasChild) {
@@ -160,11 +165,16 @@ Vue.component('VTable', {
 						}
 					}
 
-					if (vArr.colspan == 1) {
+					if (vArr.colspan == 1 && !vArr._children) {
 						vArr.rowspan = maxLevel - vArr._level + 1
 						
 					}
 				})
+			})
+
+			// 更新 dom
+			this.$nextTick(function() {
+				this.updateTable()
 			})
 		},
 
@@ -245,6 +255,9 @@ Vue.component('VTable', {
 				})
 			})
 
+			// 清 0
+			_.leftAsidwW = 0
+			// 重新计算
 			_.left.width.forEach(function(val) {
 				_.leftAsidwW += val
 			})

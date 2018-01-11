@@ -14,7 +14,7 @@
 							:colspan="th.colspan" 
 							:rowspan="th.rowspan"
 						>
-							<div class="v-table-td-inner">{{ th.text }}</div>
+							<div class="v-table-td-inner" v-html="th.text"></div>
 						</th>
 					</tr>
 				</thead>
@@ -31,17 +31,17 @@
 					<colgroup>
 						<col v-for="w in left.width" :style="{width: w+'px'}">
 					</colgroup>
-					<thead>
+					<tbody>
 						<tr v-for="trow in leftFormat">
 							<th 
 								v-for="th in trow" 
 								:colspan="th.colspan" 
 								:rowspan="th.rowspan"
 							>
-								<div class="v-table-td-inner" :title="th.text">{{ th.text }}</div>
+								<div class="v-table-td-inner" :title="th.text" v-html="th.text"></div>
 							</th>
 						</tr>
-					</thead>
+					</tbody>
 				</table>
 			</aside>
 
@@ -58,9 +58,7 @@
 						<tbody>
 							<tr v-for="row in data">
 								<td v-for="(td, key) in row" :style="{textAlign: bodyTextAlign[key]}">
-									<div class="v-table-td-inner" :title="td">
-										{{ td }}
-									</div>
+									<div class="v-table-td-inner" :title="td" v-html="td"></div>
 								</td>
 							</tr>
 						</tbody>
