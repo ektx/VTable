@@ -51,9 +51,11 @@ Vue.component('VTable', {
 			this.formatTableHeaderData(newVal, 0, 'headerFormat')
 		},
 
-		data: function (newVal, oldVal) {
-			console.log(newVal)
-			this.formatBody(newVal)
+		data: {
+			handler: function (newVal, oldVal) {
+				this.formatBody(newVal)
+			},
+			deep: true
 		},
 
 		'left.data': function (newVal, oldVal) {

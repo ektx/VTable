@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>同步数据展开收缩功能</title>
+	<!-- 表格样式 -->
+	<link rel="stylesheet" type="text/css" href="src/VTable.css">
+	
+	<style type="text/css">
+		#show-table {
+			width: 700px;
+			height: 500px;
+			margin: 0 auto;
+			border: 1px solid #ddd;
+		}
+	</style>
+</head>
+<body>
+
+	<!-- 表格内容 -->
+	<div id="show-table">
+		<!-- 使用 VTable 组件生成表格 -->
+		<v-table 
+			ref="textTable"
+			:header="tableHeader" 
+			:data="tableData"
+		></v-table>
+	</div>
+
+	<!-- 用于存放模板的区域 -->
+	<div class="tem-mod"></div>
+	
+	<!-- jQ -->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<!-- Vue -->
+	<script src="js/vue.min.js"></script>
+
+	<!-- 表格组件功能 -->
+	<script src="src/VTable.js"></script>
+
+	<script>
+
+		// 表格头
+		var header = [
+			{
+				"text": "Q1",
+				"children": [
+					{
+						"text": "1月",
+						"width": 100
+					},
+					{
+						"text": "2月",
+						"width": 100
+					},
+					{
+						"text": "3月",
+						"width": 100
+					}
+				]
+			},
+			{
+				"text": "Q2",
+				"children": [
+					{
+						"text": "4月",
+						"width": 100
+					},
+					{
+						"text": "5月",
+						"width": 100
+					},
+					{
+						"text": "6月",
+						"width": 100
+					}
+				]
+			}
+		];
+
+		// 表格的侧边
+		var leftAside = [];
+		var table = null
+
+		// 加载 VTable 表格
+		$('.tem-mod').load('src/template.html', function() {
+
+			// 完成后，我们开始生成表格内容
+			table = new Vue({
+				el: '#show-table',
+				data: {
+					// 表格中间内容
+					tableData: [],
+					// 表格的头信息
+					tableHeader: [{
+						text: '表头加载中...',
+						width: 1000
+					}],
+					// 表格侧边
+					tableLeft: {
+						// 表格侧边数据 
+						data: leftAside,
+						// 表格侧边列宽
+						width: [50, 100, 100, 150]
+					}
+				},
+				mounted: function () {
+					var _ = this;
+
+					// 加载数据
+					$.ajax({
+						url: 'mock/addSync.json',
+						type: 'get'
+					})
+					.done(function(data) {
+						// 赋值给表格
+						_.tableData = data
+
+					})
+					.fail(function(err) {
+						// 请求数据错误时
+						console.error(err)
+					})
+
+				}
+			})
+
+			// 模拟动态添加表头
+			setTimeout(function() {
+				table.tableHeader = header
+			}, 3000)
+			
+		})
+
+	</script>
+
+</body>
+</html>
