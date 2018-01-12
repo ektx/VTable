@@ -151,7 +151,10 @@
 				var tdIndex = $(this).index()
 				var tdData = table.tableData[trIndex][tdIndex]
 				var showText = '<h1>研究中心最牛</h1>'
-				// console.log(tdData.text)
+
+
+				if (table.tableData[trIndex + 1].lenght > 0) return;
+				
 				if (tdData.text !== '研究中心') {
 					showText = '<h1>市场部最牛</h1>'
 				}
