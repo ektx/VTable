@@ -23,6 +23,7 @@
 			ref="textTable"
 			:header="tableHeader" 
 			:data="tableData"
+			@toggle="toggleEvt"
 		></v-table>
 	</div>
 
@@ -135,6 +136,14 @@
 						console.error(err)
 					})
 
+				},
+				methods: {
+					toggleEvt: function(data) {
+						this.tableData.splice(data.tr.index +1, 1, [{
+							text: '<h1>'+ data.td.data.text +'最牛</h1>',
+							cols: 111
+						}])
+					}
 				}
 			})
 
@@ -143,28 +152,6 @@
 				table.tableHeader = header
 			}, 3000)
 			
-		})
-
-		$(function() {
-			$('#show-table').on('click', 'i', function(e) {
-				var trIndex = $(this).parents('tr').index()
-				var tdIndex = $(this).index()
-				var tdData = table.tableData[trIndex][tdIndex]
-				var showText = '<h1>研究中心最牛</h1>'
-
-
-				if (table.tableData[trIndex + 1].lenght > 0) return;
-				
-				if (tdData.text !== '研究中心') {
-					showText = '<h1>市场部最牛</h1>'
-				}
-
-				table.tableData.splice(trIndex +1, 1, [{
-					text: showText,
-					cols: 111
-				}])
-			})
-
 		})
 
 	</script>

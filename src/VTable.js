@@ -356,9 +356,24 @@ Vue.component('VTable', {
 		},
 
 		toggleRowData: function (trIndex, tdIndex) {
-			this.data[trIndex][tdIndex].expand = !this.data[trIndex][tdIndex].expand
+			var that = this.data[trIndex][tdIndex]
+			
+			that.expand = !that.expand
 			
 			this.formatBody(this.data)
+
+			this.$emit('toggle', {
+				status: that.expand,
+				statusMes: that.expand ? '展开' : '收缩',
+				tr: {
+					index: trIndex,
+					data: this.data[trIndex]
+				},
+				td: {
+					index: tdIndex,
+					data: that
+				}
+			})
 		}	
 	},
 	created: function() {
