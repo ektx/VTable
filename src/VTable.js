@@ -98,6 +98,8 @@ Vue.component('VTable', {
 			// 清宽度
 			this.headTableW = 0
 			this.bodyTableW = 0
+			// 清字体对齐
+			this.bodyTextAlign = []
 
 			// 给父级追加合并
 			var loopParent = function(myParent, my) {
