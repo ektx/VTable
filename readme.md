@@ -54,6 +54,28 @@ vue.js 表格效果
                 // 请求数据错误时
                 console.error(err)
             })
+        },
+        methods: {
+          holleEvt: function (data) {
+            console.log(data)
+            // data 返回以下信息
+            /*
+            	// 当前状态
+            	status: true,
+            	// 状态翻译
+				statusMes: '展开',
+				// 当前行信息
+				tr: {
+					index: 0,
+					data: {...}
+				},
+				// 当前 td 信息
+				td: {
+					index: 0,
+					data: {...}
+				}
+            */
+          }
         }
     })
     </script>
@@ -77,18 +99,21 @@ vue.js 表格效果
 
 #### 主体说明
 
-| 参数     | 说明          |
-| ------ | ----------- |
-| header | 表格头信息（必填）   |
-| data   | 表格主体信息（必填）  |
-| left   | 表格左侧信息（非必填） |
-|        |             |
+| 参数     | 说明                        |
+| ------ | ------------------------- |
+| header | 表格头信息（必填）                 |
+| data   | 表格主体信息（必填）                |
+| left   | 表格左侧信息（非必填）               |
+| toggle | 事件，展开收缩功能,返回状态与信息         |
+| scroll | 事件，返回当前滚动条的信息，{top, left} |
 
 ```html
 <v-table 
     :header="tableHeader" 
     :data="tableData"
     left="tableLeft"
+    @toggle="your_toggle_Evt"
+    @scroll="your_scroll_evt"
 ></v-table>
 ```
 
@@ -105,7 +130,7 @@ vue.js 表格效果
 // 表格头
 var header = [
     {
-        "text": "",
+        "text": "时间",
         "width": 400,
         "type": "leftAside"
     },
