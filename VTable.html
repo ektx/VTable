@@ -22,7 +22,11 @@
 		<v-table 
 			:header="tableHeader" 
 			:data="tableData"
+			@scroll="myScroll"
 		></v-table>
+
+		<p>top: {{ top }} px</p>
+		<p>left: {{ left }} px</p>
 	</div>
 
 	<!-- 用于存放模板的区域 -->
@@ -74,7 +78,10 @@
 					// 表格中间内容
 					tableData: {},
 					// 表格的头信息
-					tableHeader: header
+					tableHeader: header,
+
+					top: 0,
+					left: 0
 				},
 				mounted: function () {
 					var _ = this;
@@ -94,6 +101,12 @@
 						console.error(err)
 					})
 
+				},
+				methods: {
+					myScroll: function(info) {
+						this.top = info.top
+						this.left = info.left
+					}
 				}
 			})
 			

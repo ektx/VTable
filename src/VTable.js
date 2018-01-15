@@ -77,6 +77,11 @@ Vue.component('VTable', {
 					this.headBox.scrollLeft = left
 					this.leftBox.scrollTop = top
 				}
+
+				this.$emit('scroll', {
+					top: top,
+					left: left
+				})
 			}
 		},
 
