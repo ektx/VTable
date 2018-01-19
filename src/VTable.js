@@ -282,7 +282,6 @@ Vue.component('VTable', {
 		formatBody: function(arr) {
 			var _ = this
 			var holderExpand = '_NEED_'
-			
 			_.bodyFormat = []
 			arr.forEach(function(val, i) {
 
