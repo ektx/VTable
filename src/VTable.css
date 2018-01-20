@@ -51,6 +51,7 @@
 	text-align: center;
 	line-height: 16px;
 	border: 1px solid #eee;
+	background: #fff;
 	border-radius: 3px;
 	cursor: pointer;
 }
@@ -88,6 +89,8 @@
 	overflow: hidden;
 }
 
+
+
 /*定义滚动条整体大小*/
 .v-table-inner::-webkit-scrollbar,
 .vtable-fixed-left-mod::-webkit-scrollbar {
@@ -108,4 +111,81 @@
 .v-table-inner::-webkit-scrollbar-thumb:window-inactive,
 .vtable-fixed-left-mod::-webkit-scrollbar-thumb:window-inactive {
 	background: rgba(0, 0, 0, .15);
+}
+
+.vtable-level-1 {
+	background: #f5f5f5;
+}
+.v-table-mod .vtable-level-1 td {
+	border-color: #e4e4e4;
+}
+
+.vtable-level-2 {
+	background: #e4e4e4;
+}
+.v-table-mod .vtable-level-2 td {
+	border-color: #d0d0d0;
+}
+
+.vtable-level-3 {
+	background: #d0d0d0;
+}
+.v-table-mod .vtable-level-3 td {
+	border-color: #c5c5c5;
+}
+
+.vtable-level-4 {
+	background: #c5c5c5;
+}
+.v-table-mod .vtable-level-4 td {
+	border-color: #b1b1b1;
+}
+
+.vtable-level-5 {
+	background: #b1b1b1;
+}
+.v-table-mod .vtable-level-5 td {
+	border-color: #989898;
+}
+
+.vtable-level-6 {
+	background: #989898;
+}
+.v-table-mod .vtable-level-6 td {
+	border-color: #888;
+}
+
+.vtable-level-7 {
+	background: #888;
+}
+.v-table-mod .vtable-level-7 td {
+	border-color: #777;
+}
+
+.vtable-level-8 {
+	background: #777;
+}
+.v-table-mod .vtable-level-8 td {
+	border-color: #666;
+}
+
+.vtable-level-9 {
+	background: #666;
+}
+.v-table-mod .vtable-level-9 td {
+	border-color: #555;
+}
+
+.vtable-level-10 {
+	background: #555;
+}
+.v-table-mod .vtable-level-10 td {
+	border-color: #444;
+}
+
+.vtable-level-11 {
+	background: #444;
+}
+.v-table-mod .vtable-level-11 td {
+	border-color: #333;
 }

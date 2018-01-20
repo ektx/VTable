@@ -279,45 +279,32 @@ Vue.component('VTable', {
 
 		},
 
+
 		formatBody: function(arr) {
 			var _ = this
-			var holderExpand = '_NEED_'
-			
+			var level  = 0
 			_.bodyFormat = []
-			arr.forEach(function(val, i) {
 
-				var innerArr = []
-				if (holderExpand === '_NEED_') {
+			var loop = function(arr, parent) {
+				arr.forEach(function(val, i) {
+					val.level = level
+					val._index = i
 
-					val.forEach(function(inner, inxdex) {
-						var isObj = inner instanceof Object
-						var type = 'text'
-						var expandVal = ''
+					if (parent) {
+						val._parent = parent
+					}
+					_.bodyFormat.push(val)
 
-						if (isObj && 'type' in inner) {
-							type = inner.type
-
-							if (type === 'expand') {
-								holderExpand = inner.expand ? '_NEED_' : '_NOT_'
-								expandVal = inner.expand
-							}
-						}
-
-						innerArr.push({
-							text: isObj ? inner.text : inner,
-							colspan: isObj ? inner.cols : 1,
-							rowspan: 1,
-							type: type,
-							expand: expandVal
-						})
-					})
-				} else {
-					holderExpand = '_NEED_'
-				}
-
-				_.bodyFormat.push(innerArr)
-				
-			})
+					// 如果有扩展且扩展状态是 true
+					if ('expand' in val && val.expand) {
+						level++
+						loop(val.children, val)
+						level--
+					}
+				})
+			}
+			
+			loop(arr)
 
 		},
 
@@ -341,43 +328,16 @@ Vue.component('VTable', {
 			this.mouseoverEleTagName = evt.target.tagName
 		},
 
-		/*
-			添加行
-		*/
-		insert: function (index, data) {
 
-			var data = [{
-				text: data,
-				colspan: this.headColWidth.length,
-				rowspan: 1
-			}]
-
-			this.bodyFormat.splice(index + 1, 0, data)
-		},
-
-		/* 移除 */
-		remove: function (index) {
-			this.bodyFormat.splice(index, 1)
-		},
-
-		toggleRowData: function (trIndex, tdIndex) {
-			var that = this.data[trIndex][tdIndex]
+		toggleRowData: function (tr, td) {
 			
-			that.expand = !that.expand
-			
-			this.formatBody(this.data)
+			tr.expand = !tr.expand
 
 			this.$emit('toggle', {
-				status: that.expand,
-				statusMes: that.expand ? '展开' : '收缩',
-				tr: {
-					index: trIndex,
-					data: this.data[trIndex]
-				},
-				td: {
-					index: tdIndex,
-					data: that
-				}
+				status: tr.expand,
+				statusMes: tr.expand ? '展开' : '收缩',
+				tr: tr,
+				td: td
 			})
 		}	
 	},

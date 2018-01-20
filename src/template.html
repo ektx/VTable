@@ -14,7 +14,7 @@
 							:colspan="th.colspan" 
 							:rowspan="th.rowspan"
 						>
-							<div class="v-table-td-inner" v-html="th.text"></div>
+							<div class="v-table-td-inner" :title="th.text" v-html="th.text"></div>
 						</th>
 					</tr>
 				</thead>
@@ -56,18 +56,21 @@
 							<col v-for="w in bodyColWidth" :style="{width: w+'px'}">
 						</colgroup>
 						<tbody>
-							<tr v-for="(row, index) in bodyFormat">
+							<tr 
+								v-for="(row, index) in bodyFormat" 
+								:class="'vtable-level-'+row.level"
+							>
 								<td 
-									v-for="(td, key) in row" 
+									v-for="(td, key) in row.data" 
 									:colspan="td.colspan" 
 									:rowspan="td.rowspan"
 									:style="{textAlign: bodyTextAlign[key]}"
 								>
 									<div class="v-table-td-inner">
 										<i 
-											v-if="td.type === 'expand'" 
-											:class="[td.expand ?'open': 'close']"
-											@click="toggleRowData(index, key)"
+											v-if="'expand' in row && key === 0" 
+											:class="[row.expand ? 'open': 'close']"
+											@click="toggleRowData(row, td)"
 										></i>
 										<span :title="td.text" v-html="td.text"></span>
 									</div>

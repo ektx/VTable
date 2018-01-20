@@ -95,54 +95,26 @@
 					tableHeader: [{
 						text: '表头加载中...',
 						width: 1000
-					}],
-					// 表格侧边
-					tableLeft: {
-						// 表格侧边数据 
-						data: leftAside,
-						// 表格侧边列宽
-						width: [50, 100, 100, 150]
-					}
+					}]
 				},
 				mounted: function () {
 					var _ = this;
 
-					// 加载数据
-					$.ajax({
-						url: 'mock/addAsync.json',
-						type: 'get'
-					})
-					.done(function(data) {
-
-						var arr = []
-						// 因为是异步的，数据的展开内容并没有返回给我们
-						// 我们要自己添加上占位
-						data.forEach(function(val, i) {
-							
-							arr.push(val)
-
-							val.forEach(function(inner, x) {
-								if (typeof inner === 'object' && 'expand' in inner) {
-									arr.push([])
-								}
-							})
-						})
-						// 赋值给表格
-						_.tableData = arr
-
-					})
-					.fail(function(err) {
-						// 请求数据错误时
-						console.error(err)
+					ajaxData(function(data) {
+						_.tableData = data
 					})
 
 				},
 				methods: {
 					toggleEvt: function(data) {
-						this.tableData.splice(data.tr.index +1, 1, [{
-							text: '<h1>'+ data.td.data.text +'最牛</h1>',
-							cols: 111
-						}])
+						var _ = this
+						if (data.tr.children.length === 0) {
+
+							ajaxData(function(json) {
+								data.tr.children = json
+							})
+						}
+
 					}
 				}
 			})
@@ -153,6 +125,23 @@
 			}, 3000)
 			
 		})
+
+		function ajaxData (callback) {
+			// 加载数据
+			$.ajax({
+				url: 'mock/addAsync.json',
+				type: 'get'
+			})
+			.done(function(data) {
+
+				if (callback) callback(data)
+
+			})
+			.fail(function(err) {
+				// 请求数据错误时
+				console.error(err)
+			})
+		}
 
 	</script>
 
