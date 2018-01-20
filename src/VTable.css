@@ -189,3 +189,10 @@
 .v-table-mod .vtable-level-11 td {
 	border-color: #333;
 }
+
+.v-table-inner tr:hover {
+	background: #FFC107
+}
+.v-table-inner tr:hover td {
+	border-color: #FFC107
+}
