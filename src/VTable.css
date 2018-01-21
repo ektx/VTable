@@ -88,8 +88,16 @@
 	text-overflow: ellipsis;
 	overflow: hidden;
 }
-
-
+.v-table-td-inner.expand-box {
+	position: relative;
+	padding-left: 20px;
+}
+.v-table-td-inner.expand-box i {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin: -8px 0;
+}
 
 /*定义滚动条整体大小*/
 .v-table-inner::-webkit-scrollbar,

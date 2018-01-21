@@ -36,7 +36,8 @@ Vue.component('VTable', {
 			bodyTextAlign: [],
 			bodyTableW: 0,
 			bodyFormat: [],
-
+			// 是否为收缩盒子
+			expandBody: false,
 
 			leftBox: null,
 			asideDeep: 0,
@@ -284,6 +285,7 @@ Vue.component('VTable', {
 			var _ = this
 			var level  = 0
 			_.bodyFormat = []
+			_.expandBody = false
 
 			var loop = function(arr, parent) {
 				arr.forEach(function(val, i) {
@@ -297,6 +299,9 @@ Vue.component('VTable', {
 
 					// 如果有扩展且扩展状态是 true
 					if ('expand' in val && val.expand) {
+
+						_.expandBody = true
+						
 						level++
 						loop(val.children, val)
 						level--
