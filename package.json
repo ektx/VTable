@@ -1,0 +1,19 @@
+{
+  "name": "vable",
+  "version": "0.0.1",
+  "description": "vue.js table",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ektx/VTable.git"
+  },
+  "author": "ektx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ektx/VTable/issues"
+  },
+  "homepage": "https://github.com/ektx/VTable#readme"
+}
